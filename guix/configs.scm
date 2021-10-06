@@ -127,7 +127,7 @@
    ;;  #:config-file (local-file "./config/tmux/tmux.conf"))
    (feature-zsh)
    (feature-ssh)
-   (feature-git)
+   ;; (feature-git) ; TODO generate pgp key
 
    (feature-sway
     #:extra-config
