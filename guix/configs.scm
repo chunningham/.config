@@ -19,6 +19,7 @@
   #:use-module (rde features bittorrent)
   #:use-module (rde features mail)
   #:use-module (rde features docker)
+  #:use-module (flat packages emacs)
   #:use-module (gnu system file-systems)
   #:use-module (gnu system mapped-devices)
   #:use-module (gnu packages)
