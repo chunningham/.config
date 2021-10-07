@@ -224,8 +224,8 @@
    (map (match-lambda
   ((subvol . mount-point)
    (file-system
-     (type "btrfs")
-     (device "/dev/mapper/enc")
+     (type "ext4")
+     (device "/dev/mapper/cryptroot")
      (mount-point mount-point)
      (options (format #f "subvol=~a" subvol))
      (dependencies rles-mapped-devices))))
@@ -237,9 +237,9 @@
           (log  . "/var/log")))
    (list
     (file-system
-      (mount-point "/boot/efi")
-      (type "vfat")
-      (device (uuid "8C99-0704" 'fat32))))))
+     (mount-point "/boot/efi")
+     (type "vfat")
+     (device (uuid "C29A-4811" 'fat32))))))
 
 (define %rles-features
   (list
