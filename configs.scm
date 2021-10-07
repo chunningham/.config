@@ -73,7 +73,6 @@
 
    (feature-keyboard
     #:keyboard-layout (keyboard-layout "au"
-                                       "qwerty"
                                        #:options '("caps:swapescape")))
    ))
 
@@ -133,6 +132,7 @@
    (feature-git) ; TODO generate pgp key
 
    (feature-sway
+    #:add-keyboard-layout-to-config? #f
     #:extra-config
     `((include ,(local-file "./swayconf"))))
    (feature-sway-run-on-tty
