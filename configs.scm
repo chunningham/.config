@@ -215,8 +215,8 @@
 
 (define rles-mapped-devices
   (list (mapped-device
-         (source (uuid "0e51ee1e-49ef-45c6-b0c3-6307e9980fa9"))
-         (target "enc")
+         (source (uuid "18c39842-50a4-4291-bc57-a32499f9ed58"))
+         (target "cryptroot")
          (type luks-device-mapping))))
 
 (define rles-file-systems
