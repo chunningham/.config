@@ -275,20 +275,20 @@
 (define (dispatcher)
   (let ((rde-target (getenv "RDE_TARGET")))
     (match rde-target
-      ("rles-home" rles-he)
-      ("rles-system" rles-os)
+      ("home" rles-he)
+      ("system" rles-os)
       (_ rles-he))))
 
-;; (pretty-print-rde-config rles-config)
-;; (use-modules (gnu services)
-;; 	     (gnu services base))
-;; (display
-;;  (filter (lambda (x)
-;; 	   (eq? (service-kind x) console-font-service-type))
-;; 	 (rde-config-system-services rles-config)))
+(pretty-print-rde-config rles-config)
+(use-modules (gnu services)
+	     (gnu services base))
+(display
+ (filter (lambda (x)
+	   (eq? (service-kind x) console-font-service-type))
+	 (rde-config-system-services rles-config)))
 
-;; (use-modules (rde features))
-;; ((@@ (ice-9 pretty-print) pretty-print)
-;;  (map feature-name (rde-config-features rles-config)))
+(use-modules (rde features))
+((@@ (ice-9 pretty-print) pretty-print)
+ (map feature-name (rde-config-features rles-config)))
 
 (dispatcher)
