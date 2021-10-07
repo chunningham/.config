@@ -21,6 +21,7 @@
   #:use-module (rde features docker)
   #:use-module (flat packages emacs)
   #:use-module (gnu system file-systems)
+  #:use-module (gnu system keyboard)
   #:use-module (gnu system mapped-devices)
   #:use-module (gnu packages)
   #:use-module (rde packages)
@@ -157,7 +158,7 @@
    (feature-emacs-dired)
    (feature-emacs-eshell)
    (feature-emacs-monocle)
-   (feature-emacs-message)
+   ;; (feature-emacs-message) ; email stuff
    (feature-emacs-erc
     #:erc-nick "ch"
     #:erc-autojoin-channels-alist
