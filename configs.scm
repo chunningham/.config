@@ -57,9 +57,8 @@
     #:user-name "ch"
     #:full-name "Ch"
     #:email "c.a.cunningham6@gmail.com")
-   ;; (feature-gnupg
-   ;;  #:gpg-primary-key "74830A276C328EC2"
-   ;;  #:gpg-smart-card? #t)
+   (feature-gnupg
+    #:gpg-primary-key "chunningham")
    ;; (feature-password-store
    ;;  #:remote-password-store-url "ssh://ch@olorin.lan/~/state/password-store")
 
