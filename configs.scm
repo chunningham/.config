@@ -50,9 +50,6 @@
             (name (symbol->string id))
             (urls urls)))))
 
-(define %macbook-layout
-  (keyboard-layout "au" "qwerty" #:options '("caps:swapescape")))
-
 (define %ch-features
   (list
    (feature-user-info
@@ -74,7 +71,9 @@
    ;;                                  '("https://yhetil.org/guix-patches/1"))))
 
    (feature-keyboard
-    #:keyboard-layout %macbook-layout)
+    #:keyboard-layout (keyboard-layout "au"
+                                       "qwerty"
+                                       #:options '("caps:swapescape")))
    ))
 
 ;;; TODO: feature-wallpapers https://wallhaven.cc/
@@ -125,7 +124,7 @@
    (feature-backlight)
 
    (feature-alacritty
-    #:config-file (local-file "../alacritty/alacritty.yml"))
+    #:config-file (local-file "./alacritty.yml"))
    ;; (feature-tmux
    ;;  #:config-file (local-file "./config/tmux/tmux.conf"))
    (feature-zsh)
@@ -134,7 +133,7 @@
 
    (feature-sway
     #:extra-config
-    `((include ,(local-file "../sway/custom"))))
+    `((include ,(local-file "./swayconf"))))
    (feature-sway-run-on-tty
     #:sway-tty-number 2)
    (feature-sway-screenshot)
