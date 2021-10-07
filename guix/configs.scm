@@ -50,6 +50,9 @@
             (name (symbol->string id))
             (urls urls)))))
 
+(define %macbook-layout
+  (keyboard-layout "au" "qwerty" #:options '("caps:swapescape")))
+
 (define %ch-features
   (list
    (feature-user-info
@@ -70,8 +73,8 @@
    ;;                        (mail-lst 'guix-patches "guix-patches@gnu.org"
    ;;                                  '("https://yhetil.org/guix-patches/1"))))
 
-   ;; (feature-keyboard
-   ;;  #:keyboard-layout %dvorak-layout)
+   (feature-keyboard
+    #:keyboard-layout %macbook-layout)
    ))
 
 ;;; TODO: feature-wallpapers https://wallhaven.cc/
@@ -91,27 +94,27 @@
 ;;; services of other features.  Be careful changing it.
 (define %main-features
   (list
-   (feature-custom-services
-    #:home-services
-    (list
-     ;; TODO: Remove it once upstreamed.
-     ((@ (gnu services) simple-service)
-      'make-guix-aware-of-guix-home-subcomand
-      (@ (gnu home-services) home-environment-variables-service-type)
-      '(("GUILE_LOAD_PATH" .
-         "$XDG_CONFIG_HOME/guix/current/share/guile/site/3.0\
-:$GUILE_LOAD_PATH")
-        ("GUILE_LOAD_COMPILED_PATH" .
-         "$XDG_CONFIG_HOME/guix/current/lib/guile/3.0/site-ccache\
-:$GUILE_LOAD_COMPILED_PATH")))
+;;    (feature-custom-services
+;;     #:home-services
+;;     (list
+;;      ;; TODO: Remove it once upstreamed.
+;;      ((@ (gnu services) simple-service)
+;;       'make-guix-aware-of-guix-home-subcomand
+;;       (@ (gnu home-services) home-environment-variables-service-type)
+;;       '(("GUILE_LOAD_PATH" .
+;;          "$XDG_CONFIG_HOME/guix/current/share/guile/site/3.0\
+;; :$GUILE_LOAD_PATH")
+;;         ("GUILE_LOAD_COMPILED_PATH" .
+;;          "$XDG_CONFIG_HOME/guix/current/lib/guile/3.0/site-ccache\
+;; :$GUILE_LOAD_COMPILED_PATH")))
 
-     ((@ (gnu services) simple-service)
-      'extend-shell-profile
-      (@ (gnu home-services shells) home-shell-profile-service-type)
-      (list
-       #~(string-append
-          "alias superls="
-          #$(file-append (@ (gnu packages base) coreutils) "/bin/ls"))))))
+;;      ((@ (gnu services) simple-service)
+;;       'extend-shell-profile
+;;       (@ (gnu home-services shells) home-shell-profile-service-type)
+;;       (list
+;;        #~(string-append
+;;           "alias superls="
+;;           #$(file-append (@ (gnu packages base) coreutils) "/bin/ls"))))))
 
    (feature-base-services)
    (feature-desktop-services)
@@ -122,17 +125,16 @@
    (feature-backlight)
 
    (feature-alacritty
-    #:config-file (local-file "./config/alacritty/alacritty.yml"))
+    #:config-file (local-file "../alacritty/alacritty.yml"))
    ;; (feature-tmux
    ;;  #:config-file (local-file "./config/tmux/tmux.conf"))
    (feature-zsh)
    (feature-ssh)
-   ;; (feature-git) ; TODO generate pgp key
+   (feature-git) ; TODO generate pgp key
 
    (feature-sway
     #:extra-config
-    `((include ~/work/rde/tmp/swaycfg)
-      (include ,(local-file "./config/sway/config"))))
+    `((include ,(local-file "../sway/custom"))))
    (feature-sway-run-on-tty
     #:sway-tty-number 2)
    (feature-sway-screenshot)
