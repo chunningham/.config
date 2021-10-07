@@ -239,7 +239,7 @@
     (file-system
      (mount-point "/boot/efi")
      (type "vfat")
-     (device (uuid "C29A-4811" 'fat32))))))
+     (device (uuid "C29A-4B11" 'fat32))))))
 
 (define %rles-features
   (list
