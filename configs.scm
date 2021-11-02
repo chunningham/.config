@@ -117,7 +117,7 @@
 
    (feature-kernel
     #:kernel linux
-    #:firmware (list linux-firmware))
+    #:base-firmware (list linux-firmware))
    (feature-base-services)
    (feature-desktop-services)
    (feature-docker)
@@ -156,7 +156,7 @@
    (feature-emacs-perspective)
    (feature-emacs-input-methods)
    (feature-emacs-which-key)
-   (feature-emacs-keycast)
+   ;; (feature-emacs-keycast)
 
    (feature-emacs-dired)
    (feature-emacs-eshell)
@@ -234,8 +234,7 @@
     (device "/dev/mapper/cryptroot")
     (mount-point "/")
     ;; (options (format #f "subvol=~a" subvol))
-    (dependencies rles-mapped-devices))
-   ))
+    (dependencies rles-mapped-devices))))
 
 (define %rles-features
   (list
