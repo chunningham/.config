@@ -24,6 +24,7 @@
   #:use-module (gnu system keyboard)
   #:use-module (gnu system mapped-devices)
   #:use-module (gnu packages)
+  #:use-module (nongnu packages linux)
   #:use-module (rde packages)
   #:use-module (guix gexp)
   #:use-module (ice-9 match))
@@ -114,6 +115,9 @@
 ;;           "alias superls="
 ;;           #$(file-append (@ (gnu packages base) coreutils) "/bin/ls"))))))
 
+   (feature-kernel
+    #:kernel linux
+    #:firmware (list linux-firmware))
    (feature-base-services)
    (feature-desktop-services)
    (feature-docker)
@@ -220,26 +224,18 @@
          (type luks-device-mapping))))
 
 (define rles-file-systems
-  (append
-   (map (match-lambda
-  ((subvol . mount-point)
+  (list
    (file-system
-     (type "ext4")
-     (device "/dev/mapper/cryptroot")
-     (mount-point mount-point)
-     (options (format #f "subvol=~a" subvol))
-     (dependencies rles-mapped-devices))))
-        '((root . "/")
-          (boot . "/boot")
-          (gnu  . "/gnu")
-          (home . "/home")
-          (data . "/data")
-          (log  . "/var/log")))
-   (list
-    (file-system
-     (mount-point "/boot/efi")
-     (type "vfat")
-     (device (uuid "C29A-4B11" 'fat32))))))
+    (mount-point "/boot/efi")
+    (type "vfat")
+    (device (uuid "C29A-4B11" 'fat32)))
+   (file-system
+    (type "ext4")
+    (device "/dev/mapper/cryptroot")
+    (mount-point "/")
+    ;; (options (format #f "subvol=~a" subvol))
+    (dependencies rles-mapped-devices))
+   ))
 
 (define %rles-features
   (list
