@@ -117,7 +117,7 @@
 
    (feature-kernel
     #:kernel linux
-    #:base-firmware (list linux-firmware))
+    #:firmware (list linux-firmware))
    (feature-base-services)
    (feature-desktop-services)
    (feature-docker)
