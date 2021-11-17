@@ -25,6 +25,7 @@
   #:use-module (gnu system mapped-devices)
   #:use-module (gnu packages)
   #:use-module (nongnu packages linux)
+  #:use-module (nongnu system linux-initrd)
   #:use-module (rde packages)
   #:use-module (guix gexp)
   #:use-module (ice-9 match))
@@ -93,31 +94,10 @@
 ;;; services of other features.  Be careful changing it.
 (define %main-features
   (list
-;;    (feature-custom-services
-;;     #:home-services
-;;     (list
-;;      ;; TODO: Remove it once upstreamed.
-;;      ((@ (gnu services) simple-service)
-;;       'make-guix-aware-of-guix-home-subcomand
-;;       (@ (gnu home-services) home-environment-variables-service-type)
-;;       '(("GUILE_LOAD_PATH" .
-;;          "$XDG_CONFIG_HOME/guix/current/share/guile/site/3.0\
-;; :$GUILE_LOAD_PATH")
-;;         ("GUILE_LOAD_COMPILED_PATH" .
-;;          "$XDG_CONFIG_HOME/guix/current/lib/guile/3.0/site-ccache\
-;; :$GUILE_LOAD_COMPILED_PATH")))
-
-;;      ((@ (gnu services) simple-service)
-;;       'extend-shell-profile
-;;       (@ (gnu home-services shells) home-shell-profile-service-type)
-;;       (list
-;;        #~(string-append
-;;           "alias superls="
-;;           #$(file-append (@ (gnu packages base) coreutils) "/bin/ls"))))))
-
    (feature-kernel
     #:kernel linux
-    #:firmware (list linux-firmware))
+    #:firmware (list linux-firmware)
+    #:initrd microcode-initrd)
    (feature-base-services)
    (feature-desktop-services)
    (feature-docker)
@@ -168,12 +148,12 @@
     '(("irc.libera.chat" "#guix" "#emacs" "#tropin" "#rde")
       ("irc.oftc.net"    "#pipewire" "#wayland")))
    (feature-emacs-elpher)
-   (feature-emacs-telega)
+   ;; (feature-emacs-telega)
    (feature-emacs-pdf-tools)
    (feature-emacs-git)
    (feature-emacs-org)
-   (feature-emacs-org-roam
-    #:org-roam-directory "~/state/notes")
+   ;; (feature-emacs-org-roam
+   ;;  #:org-roam-directory "~/state/notes")
 
    ;; (feature-isync #:isync-verbose #t)
    ;; (feature-l2md)
@@ -185,7 +165,7 @@
    ;;           :sort-order oldest-first :key "W")
    ;;         %rde-notmuch-saved-searches))
 
-   (feature-transmission #:auto-start? #f)
+   ;; (feature-transmission #:auto-start? #f)
 
    (feature-xdg
     #:xdg-user-directories-configuration
@@ -203,7 +183,7 @@
     (append
      (pkgs
       "alsa-utils" "mpv" "youtube-dl" "imv"
-      "obs" "obs-wlrobs"
+      "obs" "obs-wlrobs" "vim"
       "ungoogled-chromium-wayland" "ublock-origin-chromium"
       "hicolor-icon-theme" "adwaita-icon-theme" "gnome-themes-standard"
       "ripgrep" "curl" "make")))))
@@ -219,7 +199,7 @@
 
 (define rles-mapped-devices
   (list (mapped-device
-         (source (uuid "18c39842-50a4-4291-bc57-a32499f9ed58"))
+         (source (uuid "887c38b9-2ed7-4b89-92d4-18c570c01b19"))
          (target "cryptroot")
          (type luks-device-mapping))))
 
@@ -228,12 +208,11 @@
    (file-system
     (mount-point "/boot/efi")
     (type "vfat")
-    (device (uuid "C29A-4B11" 'fat32)))
+    (device "/dev/nvme0n1p1"))
    (file-system
     (type "ext4")
-    (device "/dev/mapper/cryptroot")
+    (device (file-system-label "cryptroot"))
     (mount-point "/")
-    ;; (options (format #f "subvol=~a" subvol))
     (dependencies rles-mapped-devices))))
 
 (define %rles-features
