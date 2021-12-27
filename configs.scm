@@ -130,7 +130,7 @@
     #:initrd microcode-initrd)
    (feature-base-services)
    (feature-desktop-services)
-   (feature-docker)
+   ;; (feature-docker)
 
    (feature-fonts)
    (feature-pipewire)
