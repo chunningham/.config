@@ -14,14 +14,16 @@
   #:use-module (rde features shells)
   #:use-module (rde features shellutils)
   #:use-module (rde features ssh)
-  #:use-module (rde features emacs)
+  ;; #:use-module (rde features emacs)
   #:use-module (rde features linux)
   #:use-module (rde features bittorrent)
   #:use-module (rde features mail)
   #:use-module (rde features docker)
-  #:use-module (flat packages emacs)
+  #:use-module (rde features video)
+  #:use-module (rde features markup)
+  ;; #:use-module (gnu services)
+  ;; #:use-module (gnu services nix)
   #:use-module (gnu system file-systems)
-  #:use-module (gnu system keyboard)
   #:use-module (gnu system mapped-devices)
   #:use-module (gnu packages)
   #:use-module (nongnu packages linux)
@@ -58,30 +60,42 @@
    (feature-user-info
     #:user-name "ch"
     #:full-name "Ch"
-    #:email "c.a.cunningham6@gmail.com")
-   (feature-gnupg
-    #:gpg-primary-key "chunningham")
+    #:email "ch@rlescunningh.am"
+    ;; #:user-initial-password-hash
+    ;; "$6$abc$3SAZZQGdvQgAscM2gupP1tC.SqnsaLSPoAnEOb2k6jXMhzQqS1kCSplAJ/vUy2rrnpHtt6frW2Ap5l/tIvDsz."
+    ;; (crypt "bob" "$6$abc")
+
+    ;; WARNING: This option can reduce the explorability by hiding
+    ;; some helpful messages and parts of the interface for the sake
+    ;; of minimalistic, less distractive and clean look.  Generally
+    ;; it's not recommended to use it.
+    )
+   ;; (feature-gnupg
+   ;;  #:gpg-primary-key "74830A276C328EC2"
+   ;;  #:gpg-smart-card? #t)
    ;; (feature-password-store
-   ;;  #:remote-password-store-url "ssh://ch@olorin.lan/~/state/password-store")
+   ;;  #:remote-password-store-url "ssh://abcdw@olorin.lan/~/state/password-store")
 
    ;; (feature-mail-settings
    ;;  #:mail-accounts (list (mail-acc 'work       "andrew@trop.in")
    ;;                        (mail-acc 'personal   "andrewtropin@gmail.com"))
    ;;  #:mailing-lists (list (mail-lst 'guix-devel "guix-devel@gnu.org"
    ;;                                  '("https://yhetil.org/guix-devel/0"))
+   ;;                        (mail-lst 'guix-bugs "guix-bugs@gnu.org"
+   ;;                                  '("https://yhetil.org/guix-bugs/0"))
    ;;                        (mail-lst 'guix-patches "guix-patches@gnu.org"
    ;;                                  '("https://yhetil.org/guix-patches/1"))))
 
    (feature-keyboard
-    #:keyboard-layout (keyboard-layout "au"
-                                       #:options '("caps:swapescape")))
-   ))
+    #:keyboard-layout %dvorak-layout)))
 
+;;; TODO: Add documentation about starting guile repl
 ;;; TODO: feature-wallpapers https://wallhaven.cc/
 ;;; TODO: feature-icecat
 ;;; TODO: feature-bash?
 ;;; TODO: feature-battery
 ;; PipeWire/iwd:
+;; https://github.com/J-Lentz/iwgtk
 ;; https://github.com/krevedkokun/guix-config/blob/master/system/yggdrasil.scm
 
 
@@ -95,26 +109,20 @@
 (define %main-features
   (list
    (feature-custom-services
+    #:system-services
+    (list
+     ;; (service nix-service-type)
+     )
     #:home-services
     (list
-     ;; TODO: Remove it once upstreamed.
-     ((@ (gnu services) simple-service)
-      'make-guix-aware-of-guix-home-subcomand
-      (@ (gnu home services) home-environment-variables-service-type)
-      '(("GUILE_LOAD_PATH" .
-         "$XDG_CONFIG_HOME/guix/current/share/guile/site/3.0\
-:$GUILE_LOAD_PATH")
-        ("GUILE_LOAD_COMPILED_PATH" .
-         "$XDG_CONFIG_HOME/guix/current/lib/guile/3.0/site-ccache\
-:$GUILE_LOAD_COMPILED_PATH")))
-
-     ((@ (gnu services) simple-service)
-      'extend-shell-profile
-      (@ (gnu home-services shells) home-shell-profile-service-type)
-      (list
-       #~(string-append
-          "alias superls="
-          #$(file-append (@ (gnu packages base) coreutils) "/bin/ls"))))))
+     ;; ((@ (gnu services) simple-service)
+     ;;  'extend-shell-profile
+     ;;  (@ (gnu home-services shells) home-shell-profile-service-type)
+     ;;  (list
+     ;;   #~(string-append
+     ;;      "alias superls="
+     ;;      #$(file-append (@ (gnu packages base) coreutils) "/bin/ls"))))
+     ))
 
    (feature-kernel
     #:kernel linux
@@ -134,7 +142,7 @@
    ;;  #:config-file (local-file "./config/tmux/tmux.conf"))
    (feature-zsh)
    (feature-ssh)
-   (feature-git) ; TODO generate pgp key
+   (feature-git)
 
    (feature-sway
     #:add-keyboard-layout-to-config? #f
@@ -145,49 +153,14 @@
    (feature-sway-screenshot)
    (feature-sway-statusbar)
 
-   (feature-direnv)
-   (feature-emacs
-    #:package emacs-pgtk-native-comp
-    #:additional-elisp-packages
-    (append
-     (pkgs "emacs-yasnippet" "emacs-elfeed" "emacs-hl-todo")))
-   (feature-emacs-appearance)
-   (feature-emacs-faces)
-   (feature-emacs-completion)
-   (feature-emacs-project)
-   (feature-emacs-perspective)
-   (feature-emacs-input-methods)
-   (feature-emacs-which-key)
-   ;; (feature-emacs-keycast)
+   ;; (feature-direnv)
+   ;; (feature-markdown)
 
-   (feature-emacs-dired)
-   (feature-emacs-eshell)
-   (feature-emacs-monocle)
-   ;; (feature-emacs-message) ; email stuff
-   (feature-emacs-erc
-    #:erc-nick "ch"
-    #:erc-autojoin-channels-alist
-    '(("irc.libera.chat" "#guix" "#emacs" "#tropin" "#rde")
-      ("irc.oftc.net"    "#pipewire" "#wayland")))
-   (feature-emacs-elpher)
-   ;; (feature-emacs-telega)
-   (feature-emacs-pdf-tools)
-   (feature-emacs-git)
-   (feature-emacs-org)
-   ;; (feature-emacs-org-roam
-   ;;  #:org-roam-directory "~/state/notes")
-
-   ;; (feature-isync #:isync-verbose #t)
-   ;; (feature-l2md)
-   ;; (feature-msmtp)
-   ;; (feature-notmuch
-   ;;  #:notmuch-saved-searches
-   ;;  (cons* '(:name "Work Inbox" :query "tag:work and tag:inbox"
-   ;;           :count "tag:work and tag:inbox and tag:unread"
-   ;;           :sort-order oldest-first :key "W")
-   ;;         %rde-notmuch-saved-searches))
-
-   ;; (feature-transmission #:auto-start? #f)
+   (feature-mpv)
+   (feature-isync #:isync-verbose #t)
+   (feature-l2md)
+   (feature-msmtp)
+   (feature-transmission #:auto-start? #f)
 
    (feature-xdg
     #:xdg-user-directories-configuration
@@ -204,8 +177,12 @@
     #:home-packages
     (append
      (pkgs
-      "alsa-utils" "mpv" "youtube-dl" "imv"
-      "obs" "obs-wlrobs" "vim"
+      "alsa-utils" "youtube-dl" "imv"
+      "obs" "obs-wlrobs"
+      "recutils"
+      "fheroes2"
+      ;; TODO: Enable pipewire support to chromium by default
+      ;; chrome://flags/#enable-webrtc-pipewire-capturer
       "ungoogled-chromium-wayland" "ublock-origin-chromium"
       "hicolor-icon-theme" "adwaita-icon-theme" "gnome-themes-standard"
       "ripgrep" "curl" "make")))))
@@ -221,21 +198,31 @@
 
 (define rles-mapped-devices
   (list (mapped-device
-         (source (uuid "887c38b9-2ed7-4b89-92d4-18c570c01b19"))
+         (source (uuid "b53a556a-33a0-498d-91e9-0a541903f786"))
          (target "cryptroot")
          (type luks-device-mapping))))
 
 (define rles-file-systems
-  (list
-   (file-system
-    (mount-point "/boot/efi")
-    (type "vfat")
-    (device "/dev/nvme0n1p1"))
-   (file-system
-    (type "ext4")
-    (device (file-system-label "cryptroot"))
-    (mount-point "/")
-    (dependencies rles-mapped-devices))))
+  (append
+   (map (match-lambda
+          ((subvol . mount-point)
+           (file-system
+            (type "btrfs")
+            (device "/dev/mapper/cryptroot")
+            (mount-point mount-point)
+            (options (format #f "subvol=~a" subvol))
+            (dependencies rles-mapped-devices))))
+        '((root . "/")
+          (boot . "/boot")
+          (gnu  . "/gnu")
+          (home . "/home")
+          (data . "/data")
+          (log  . "/var/log")))
+   (list
+    (file-system
+     (mount-point "/boot/efi")
+     (type "vfat")
+     (device "/dev/nvme0n1p1")))))
 
 (define %rles-features
   (list
@@ -274,17 +261,5 @@
       ("home" rles-he)
       ("system" rles-os)
       (_ rles-he))))
-
-(pretty-print-rde-config rles-config)
-(use-modules (gnu services)
-	     (gnu services base))
-(display
- (filter (lambda (x)
-	   (eq? (service-kind x) console-font-service-type))
-	 (rde-config-system-services rles-config)))
-
-(use-modules (rde features))
-((@@ (ice-9 pretty-print) pretty-print)
- (map feature-name (rde-config-features rles-config)))
 
 (dispatcher)
