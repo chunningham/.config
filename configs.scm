@@ -161,7 +161,7 @@
    ;; (feature-isync #:isync-verbose #t)
    ;; (feature-l2md)
    ;; (feature-msmtp)
-   (feature-transmission #:auto-start? #f)
+   ;; (feature-transmission #:auto-start? #f)
 
    (feature-xdg
     #:xdg-user-directories-configuration
