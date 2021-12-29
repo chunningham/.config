@@ -204,26 +204,16 @@
          (type luks-device-mapping))))
 
 (define rles-file-systems
-  (append
-   (map (match-lambda
-          ((subvol . mount-point)
-           (file-system
-            (type "btrfs")
-            (device "/dev/mapper/cryptroot")
-            (mount-point mount-point)
-            (options (format #f "subvol=~a" subvol))
-            (dependencies rles-mapped-devices))))
-        '((root . "/")
-          (boot . "/boot")
-          (gnu  . "/gnu")
-          (home . "/home")
-          (data . "/data")
-          (log  . "/var/log")))
-   (list
-    (file-system
-     (mount-point "/boot/efi")
-     (type "vfat")
-     (device "/dev/nvme0n1p1")))))
+  (list
+   (file-system
+    (type "btrfs")
+    (device "/dev/mapper/cryptroot")
+    (mount-point "/")
+    (dependencies rles-mapped-devices))
+   (file-system
+    (mount-point "/boot/efi")
+    (type "vfat")
+    (device "/dev/nvme0n1p1"))))
 
 (define %rles-features
   (list
