@@ -143,7 +143,7 @@
    (feature-zsh)
    (feature-ssh)
    (feature-git
-    #:sign-commits #f)
+    #:sign-commits? #f)
 
    (feature-sway
     #:add-keyboard-layout-to-config? #f
@@ -158,9 +158,9 @@
    ;; (feature-markdown)
 
    (feature-mpv)
-   (feature-isync #:isync-verbose #t)
-   (feature-l2md)
-   (feature-msmtp)
+   ;; (feature-isync #:isync-verbose #t)
+   ;; (feature-l2md)
+   ;; (feature-msmtp)
    (feature-transmission #:auto-start? #f)
 
    (feature-xdg
