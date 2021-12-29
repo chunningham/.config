@@ -23,6 +23,7 @@
   #:use-module (rde features markup)
   ;; #:use-module (gnu services)
   ;; #:use-module (gnu services nix)
+  #:use-module (gnu system keyboard)
   #:use-module (gnu system file-systems)
   #:use-module (gnu system mapped-devices)
   #:use-module (gnu packages)
@@ -70,9 +71,7 @@
     ;; of minimalistic, less distractive and clean look.  Generally
     ;; it's not recommended to use it.
     )
-   ;; (feature-gnupg
-   ;;  #:gpg-primary-key "74830A276C328EC2"
-   ;;  #:gpg-smart-card? #t)
+   ;; (feature-gnupg)
    ;; (feature-password-store
    ;;  #:remote-password-store-url "ssh://abcdw@olorin.lan/~/state/password-store")
 
@@ -87,7 +86,8 @@
    ;;                                  '("https://yhetil.org/guix-patches/1"))))
 
    (feature-keyboard
-    #:keyboard-layout %dvorak-layout)))
+    #:keyboard-layout (keyboard-layout "au"
+                                       #:options '("caps:swapescape")))))
 
 ;;; TODO: Add documentation about starting guile repl
 ;;; TODO: feature-wallpapers https://wallhaven.cc/
@@ -142,7 +142,8 @@
    ;;  #:config-file (local-file "./config/tmux/tmux.conf"))
    (feature-zsh)
    (feature-ssh)
-   (feature-git)
+   (feature-git
+    #:sign-commits #f)
 
    (feature-sway
     #:add-keyboard-layout-to-config? #f
